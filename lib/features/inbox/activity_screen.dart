@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/utils.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -65,18 +66,21 @@ class _ActivityScreenState extends State<ActivityScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(onTap: _toggleActivity, child: Text("Activity")),
-            Gaps.h4,
-            RotationTransition(
-              turns: _animation,
-              child: FaIcon(FontAwesomeIcons.chevronDown, size: 16),
-            ),
-          ],
+        title: GestureDetector(
+          onTap: _toggleActivity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Activity"),
+              Gaps.h4,
+              RotationTransition(
+                turns: _animation,
+                child: FaIcon(FontAwesomeIcons.chevronDown, size: 16),
+              ),
+            ],
+          ),
         ),
       ),
       body: Stack(
@@ -89,7 +93,10 @@ class _ActivityScreenState extends State<ActivityScreen>
                   "New",
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
-                    color: Colors.grey.shade600,
+                    color:
+                        isDarkMode(context)
+                            ? Colors.white
+                            : Colors.grey.shade600,
                   ),
                 ),
               ),
@@ -132,7 +139,10 @@ class _ActivityScreenState extends State<ActivityScreen>
                           text: "Account updates: ",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color:
+                                isDarkMode(context)
+                                    ? Colors.white
+                                    : Colors.black,
                           ),
                           children: [
                             TextSpan(
@@ -143,7 +153,10 @@ class _ActivityScreenState extends State<ActivityScreen>
                               text: "${notification}h",
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
-                                color: Colors.grey.shade600,
+                                color:
+                                    isDarkMode(context)
+                                        ? Colors.grey.shade300
+                                        : Colors.grey.shade600,
                               ),
                             ),
                           ],
@@ -170,7 +183,8 @@ class _ActivityScreenState extends State<ActivityScreen>
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
                 ),
-                color: Colors.white,
+                color:
+                    isDarkMode(context) ? Colors.grey.shade800 : Colors.white,
               ),
               padding: EdgeInsets.only(left: 16),
               child: Column(

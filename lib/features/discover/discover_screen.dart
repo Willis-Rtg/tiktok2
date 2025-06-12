@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok2/constants/breakpoints.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/utils.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -59,19 +61,25 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: CupertinoSearchTextField(
-          onChanged: onSearchChanged,
-          onSubmitted: onSearchSubmitted,
-          cursorColor: Theme.of(context).primaryColor,
+        title: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: Breakpoints.sm),
+          child: CupertinoSearchTextField(
+            style: TextStyle(
+              color: isDarkMode(context) ? Colors.grey.shade200 : Colors.black,
+            ),
+            onChanged: onSearchChanged,
+            onSubmitted: onSearchSubmitted,
+            cursorColor: Theme.of(context).primaryColor,
+          ),
         ),
         bottom: TabBar(
           controller: tabController,
           padding: EdgeInsets.only(left: 16),
           tabAlignment: TabAlignment.start,
           isScrollable: true,
-          labelColor: Colors.black,
+          // labelColor: isDarkMode(context) ? Colors.grey.shade200 : Colors.black,
           labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          indicatorColor: Colors.black,
+          // indicatorColor: Colors.black,
           splashFactory: NoSplash.splashFactory,
           unselectedLabelColor: Colors.grey,
           overlayColor: WidgetStatePropertyAll(Colors.transparent),
@@ -85,72 +93,82 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount:
+                  MediaQuery.of(context).size.width > Breakpoints.lg ? 5 : 2,
               childAspectRatio: 5 / 12,
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
             ),
             itemBuilder:
-                (context, index) => Column(
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 3 / 5.5,
-                      child: FadeInImage.assetNetwork(
-                        placeholder: "assets/images/gpt-background.webp",
-                        image:
-                            "https://images.unsplash.com/photo-1742201408341-29204ea79380?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Gaps.v8,
-                    Text(
-                      "lorem ipsum dolor sit amet. consectetur adipiscing elit. sed do eiusmod tempor incididunt.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Gaps.v4,
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                (context, index) => LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Column(
                       children: [
-                        CircleAvatar(
-                          radius: 16,
-                          backgroundImage: NetworkImage(
-                            "https://d1telmomo28umc.cloudfront.net/media/public/avatars/wills-1636619076.jpg",
+                        AspectRatio(
+                          aspectRatio: 3 / 5.5,
+                          child: FadeInImage.assetNetwork(
+                            placeholder: "assets/images/gpt-background.webp",
+                            image:
+                                "https://images.unsplash.com/photo-1742201408341-29204ea79380?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8",
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        Gaps.h4,
-                        Expanded(
-                          child: Text(
-                            "John Doe lorem ipsum dolor sit amet. consectetur adipiscing elit. sed do eiusmod tempor incididunt.",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        FaIcon(
-                          FontAwesomeIcons.heart,
-                          size: 20,
-                          color: Colors.grey,
-                        ),
-                        Gaps.h4,
+                        Gaps.v8,
                         Text(
-                          "2.5M",
+                          "${constraints.maxWidth} lorem ipsum dolor sit amet. consectetur adipiscing elit. sed do eiusmod tempor incididunt.",
                           style: TextStyle(
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black54,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Gaps.v4,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (constraints.maxWidth < 250 ||
+                                350 < constraints.maxWidth)
+                              CircleAvatar(
+                                radius: 16,
+                                foregroundImage: NetworkImage(
+                                  "https://d1telmomo28umc.cloudfront.net/media/public/avatars/wills-1636619076.jpg",
+                                ),
+                              ),
+                            Gaps.h4,
+                            Expanded(
+                              child: Text(
+                                "John Doe lorem ipsum dolor sit amet. consectetur adipiscing elit. sed do eiusmod tempor incididunt.",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color:
+                                      isDarkMode(context)
+                                          ? Colors.grey.shade300
+                                          : Colors.black54,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            FaIcon(
+                              FontAwesomeIcons.heart,
+                              size: 20,
+                              color: Colors.grey,
+                            ),
+                            Gaps.h4,
+                            Text(
+                              "2.5M",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
           ),
           for (var tab in tabs.skip(1)) Center(child: Text(tab)),

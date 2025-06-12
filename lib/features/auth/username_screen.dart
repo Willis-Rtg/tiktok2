@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/email_screen.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
+import 'package:tiktok2/utils.dart';
 
 class UsernameScreen extends StatefulWidget {
   const UsernameScreen({super.key});
@@ -29,7 +30,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
     if (_username.isEmpty) return;
     Navigator.of(
       context,
-    ).push(MaterialPageRoute(builder: (context) => EamilScreen()));
+    ).pushNamed("/email", arguments: EmailScreenArgs(username: _username));
   }
 
   @override
@@ -56,14 +57,25 @@ class _UsernameScreenState extends State<UsernameScreen> {
               Gaps.v8,
               Text(
                 "You can always change this later.",
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      isDarkMode(context)
+                          ? Colors.grey.shade300
+                          : Colors.black54,
+                ),
               ),
               Gaps.v16,
               TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(
                   hintText: "Username",
-                  hintStyle: TextStyle(color: Colors.black54),
+                  hintStyle: TextStyle(
+                    color:
+                        isDarkMode(context)
+                            ? Colors.grey.shade300
+                            : Colors.black54,
+                  ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),

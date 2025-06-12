@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/login_submit_screen.dart';
 import 'package:tiktok2/features/auth/widgets/social_btn.dart';
+import 'package:tiktok2/utils.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -10,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onSignUpTap() {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop("hello");
     }
 
     return Scaffold(
@@ -27,13 +28,18 @@ class LoginScreen extends StatelessWidget {
               Gaps.v20,
               Text(
                 "Create a profile, follow other accounts, make your own videos, and more.",
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(
+                  color:
+                      isDarkMode(context)
+                          ? Colors.grey.shade300
+                          : Colors.black54,
+                ),
                 textAlign: TextAlign.center,
               ),
               Gaps.v40,
               SocialBtn(
                 text: "Use phone or email",
-                color: Colors.white,
+                color: isDarkMode(context) ? Colors.black : Colors.white,
                 onTap:
                     () => Navigator.of(context).push(
                       MaterialPageRoute(
@@ -45,21 +51,21 @@ class LoginScreen extends StatelessWidget {
               Gaps.v12,
               SocialBtn(
                 text: "Continue with Apple",
-                color: Colors.white,
+                color: isDarkMode(context) ? Colors.black : Colors.white,
                 onTap: () {},
                 icon: FontAwesomeIcons.apple,
               ),
               Gaps.v12,
               SocialBtn(
                 text: "Continue with Facebook",
-                color: Colors.white,
+                color: isDarkMode(context) ? Colors.black : Colors.white,
                 onTap: () {},
                 icon: FontAwesomeIcons.facebook,
               ),
               Gaps.v12,
               SocialBtn(
                 text: "Continue with Google",
-                color: Colors.white,
+                color: isDarkMode(context) ? Colors.black : Colors.white,
                 onTap: () {},
                 icon: FontAwesomeIcons.google,
               ),

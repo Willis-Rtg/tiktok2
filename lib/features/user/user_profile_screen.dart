@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok2/constants/breakpoints.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/user/settings_screen.dart';
 import 'package:tiktok2/features/user/widgets/count_follow.dart';
 import 'package:tiktok2/features/user/widgets/persistent_tabbar_header.dart';
+import 'package:tiktok2/utils.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key, required this.toFollow});
@@ -31,15 +33,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               (context, innerBoxIsScrolled) => [
                 SliverAppBar(
                   pinned: true,
-                  backgroundColor: Colors.white,
-                  surfaceTintColor: Colors.white,
+                  backgroundColor:
+                      isDarkMode(context) ? Colors.black : Colors.white,
+                  surfaceTintColor:
+                      isDarkMode(context) ? Colors.black : Colors.white,
                   expandedHeight: 56,
                   collapsedHeight: 56,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
                     title: Text(
                       "Willis",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color:
+                            isDarkMode(context) ? Colors.white : Colors.black,
+                      ),
                     ),
                     // background: Image.network(
                     //   "https://kr-cdn.spooncast.net/profiles/9/reWGO9Uvmgjj3/fe80dbeb-bf0f-4eb3-9d14-351466881f36.jpg",
@@ -83,7 +91,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           children: [
                             Text(
                               "Willis",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    isDarkMode(context)
+                                        ? Colors.white
+                                        : Colors.black,
+                              ),
                             ),
                             Gaps.h4,
                             FaIcon(
@@ -198,9 +212,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ),
                 ),
-                SliverPersistentHeader(
-                  delegate: PersistentTabBarHeader(),
-                  pinned: true,
+                Container(
+                  // constraints: BoxConstraints(maxWidth: Breakpoints.sm),
+                  child: SliverPersistentHeader(
+                    delegate: PersistentTabBarHeader(),
+                    pinned: true,
+                  ),
                 ),
               ],
           body: Column(

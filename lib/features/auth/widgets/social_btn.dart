@@ -22,6 +22,7 @@ class SocialBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(
           vertical: Sizes.size14,
           horizontal: 16,

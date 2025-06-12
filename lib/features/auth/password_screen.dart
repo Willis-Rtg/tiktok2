@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/birthday_screen.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
+import 'package:tiktok2/utils.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
@@ -62,7 +63,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
               Gaps.v8,
               Text(
                 "You can always change this later.",
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      isDarkMode(context)
+                          ? Colors.grey.shade300
+                          : Colors.black54,
+                ),
               ),
               Gaps.v16,
               TextField(
@@ -101,7 +108,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   ),
                   // errorText: _isPasswordValid(),
                   hintText: "Password",
-                  hintStyle: TextStyle(color: Colors.black54),
+                  hintStyle: TextStyle(
+                    color:
+                        isDarkMode(context)
+                            ? Colors.grey.shade300
+                            : Colors.black54,
+                  ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),
@@ -120,7 +132,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
               Gaps.v16,
               Text(
                 "Your password must have:",
-                style: TextStyle(color: Colors.grey.shade700),
+                style: TextStyle(
+                  color:
+                      isDarkMode(context)
+                          ? Colors.grey.shade300
+                          : Colors.black54,
+                ),
               ),
               Gaps.v16,
               Row(

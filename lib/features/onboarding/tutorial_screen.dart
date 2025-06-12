@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
 import 'package:tiktok2/features/main_navigation/main_navigation_screen.dart';
+import 'package:tiktok2/utils.dart';
 
 class TutorialScreen extends StatefulWidget {
   const TutorialScreen({super.key});
@@ -154,7 +155,10 @@ class _TutorialScreenState extends State<TutorialScreen> {
                     Text(
                       "Videos are personalized for you based on what you watch, like, and share.",
                       style: TextStyle(
-                        color: Colors.black45,
+                        color:
+                            isDarkMode(context)
+                                ? Colors.grey.shade300
+                                : Colors.black45,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         height: 1.2,
@@ -181,7 +185,10 @@ class _TutorialScreenState extends State<TutorialScreen> {
                     Text(
                       "Videos are personalized for you based on what you watch, like, and share.",
                       style: TextStyle(
-                        color: Colors.black45,
+                        color:
+                            isDarkMode(context)
+                                ? Colors.grey.shade300
+                                : Colors.black45,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         height: 1.2,
@@ -198,7 +205,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
             ),
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.white,
+            color: isDarkMode(context) ? Colors.black : Colors.white,
             child: SizedBox(
               height: 80,
               child: AnimatedOpacity(

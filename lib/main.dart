@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:tiktok2/features/inbox/activity_screen.dart';
-import 'package:tiktok2/features/main_navigation/main_navigation_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:tiktok2/features/auth/birthday_screen.dart';
+import 'package:tiktok2/features/auth/email_screen.dart';
+import 'package:tiktok2/features/auth/login_screen.dart';
+import 'package:tiktok2/features/auth/sign_up_screen.dart';
+import 'package:tiktok2/features/auth/username_screen.dart';
+import 'package:tiktok2/features/onboarding/interests_screen.dart';
+import 'package:tiktok2/features/onboarding/tutorial_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(const TiktokApp());
 }
 
@@ -12,10 +22,15 @@ class TiktokApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Tiktok',
+      themeMode: ThemeMode.system,
       theme: ThemeData(
+        useMaterial3: true,
+        textTheme: Typography.blackMountainView,
+        brightness: Brightness.light,
         primaryColor: const Color(0xFFE9435A),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE9435A)),
+        // colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE9435A)),
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
@@ -29,7 +44,35 @@ class TiktokApp extends StatelessWidget {
         ),
         // splashColor: Color(0xFFE9435A),
       ),
-      home: MainNavigationScreen(),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        textTheme: Typography.whiteMountainView,
+        brightness: Brightness.dark,
+        primaryColor: const Color(0xFFE9435A),
+        // colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE9435A)),
+        scaffoldBackgroundColor: Colors.black,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          surfaceTintColor: Colors.black,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        // splashColor: Color(0xFFE9435A),
+      ),
+      routes: {
+        "/": (context) => SignUpScreen(),
+        "/login": (context) => LoginScreen(),
+        "/username": (context) => UsernameScreen(),
+        "/email": (context) => EamilScreen(),
+        "/birthday": (context) => BirthdayScreen(),
+        "/interests": (context) => InterestsScreen(),
+        "/onboarding": (context) => TutorialScreen(),
+      },
     );
   }
 }

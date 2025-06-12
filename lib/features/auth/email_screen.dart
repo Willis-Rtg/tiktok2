@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/password_screen.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
+import 'package:tiktok2/utils.dart';
+
+class EmailScreenArgs {
+  final String username;
+
+  const EmailScreenArgs({required this.username});
+}
 
 class EamilScreen extends StatefulWidget {
   const EamilScreen({super.key});
+
+  // final String username;
 
   @override
   State<EamilScreen> createState() => _EamilScreenState();
@@ -49,6 +58,10 @@ class _EamilScreenState extends State<EamilScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments as EmailScreenArgs;
+
+    print(args.username);
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -65,7 +78,13 @@ class _EamilScreenState extends State<EamilScreen> {
               Gaps.v8,
               Text(
                 "You can always change this later.",
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      isDarkMode(context)
+                          ? Colors.grey.shade300
+                          : Colors.black54,
+                ),
               ),
               Gaps.v16,
               TextField(
@@ -73,7 +92,12 @@ class _EamilScreenState extends State<EamilScreen> {
                 decoration: InputDecoration(
                   errorText: _isEmailValid(),
                   hintText: "abcd@example.com",
-                  hintStyle: TextStyle(color: Colors.black54),
+                  hintStyle: TextStyle(
+                    color:
+                        isDarkMode(context)
+                            ? Colors.grey.shade300
+                            : Colors.black54,
+                  ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),

@@ -6,6 +6,7 @@ import 'package:tiktok2/features/inbox/inbox_screen.dart';
 import 'package:tiktok2/features/main_navigation/widgets/nav_tab.dart';
 import 'package:tiktok2/features/user/user_profile_screen.dart';
 import 'package:tiktok2/features/video/video_timeline_screen.dart';
+import 'package:tiktok2/utils.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -35,7 +36,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDarkMode(context) ? Colors.black : Colors.white,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
@@ -108,11 +109,21 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     width: 40,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color:
+                          isDarkMode(context)
+                              ? Colors.grey.shade800
+                              : Colors.white,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     alignment: Alignment.center,
-                    child: FaIcon(FontAwesomeIcons.plus, size: 22),
+                    child: FaIcon(
+                      FontAwesomeIcons.plus,
+                      size: 22,
+                      color:
+                          isDarkMode(context)
+                              ? Colors.grey.shade300
+                              : Colors.black,
+                    ),
                   ),
                 ],
               ),

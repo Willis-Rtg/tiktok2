@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/video/widgets/video_btn.dart';
 import 'package:tiktok2/features/video/widgets/video_comments.dart';
+import 'package:tiktok2/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -32,6 +34,9 @@ class _VideoPostState extends State<VideoPost>
     await _videoPlayerController.initialize();
     _videoPlayerController.play();
     _isPlaying = true;
+    if (kIsWeb) {
+      _videoPlayerController.setVolume(0);
+    }
     setState(() {});
   }
 
@@ -58,6 +63,7 @@ class _VideoPostState extends State<VideoPost>
       context: context,
       builder: (context) => VideoComments(),
       isScrollControlled: true,
+      // backgroundColor: isDarkMode(context) ? Colors.black : Colors.white,
     );
     _onTogglePause();
   }
@@ -77,6 +83,18 @@ class _VideoPostState extends State<VideoPost>
     // _animationController.addListener(() {
     //   setState(() {});
     // });
+  }
+
+  void toggleVolume() {
+    if (!mounted) return;
+    if (_videoPlayerController.value.isInitialized) {
+      if (_videoPlayerController.value.volume == 0) {
+        _videoPlayerController.setVolume(1);
+      } else {
+        _videoPlayerController.setVolume(0);
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -172,6 +190,24 @@ class _VideoPostState extends State<VideoPost>
             right: 20,
             child: Column(
               children: [
+                VideoBtn(
+                  icon:
+                      _videoPlayerController.value.volume == 0
+                          ? FontAwesomeIcons.volumeOff
+                          : FontAwesomeIcons.volumeHigh,
+                  onTap: toggleVolume,
+                  text: "off",
+                ),
+                Gaps.v16,
+                CircleAvatar(
+                  radius: 24,
+                  foregroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Colors.white,
+                  foregroundImage: NetworkImage(
+                    "https://d1telmomo28umc.cloudfront.net/media/public/avatars/wills-1636619076.jpg",
+                  ),
+                ),
+                Gaps.v16,
                 VideoBtn(
                   icon: FontAwesomeIcons.heart,
                   onTap: () {},

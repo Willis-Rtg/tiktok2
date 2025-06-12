@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
 import 'package:tiktok2/features/onboarding/interests_screen.dart';
+import 'package:tiktok2/utils.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
@@ -65,15 +66,22 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               Gaps.v8,
               Text(
                 "Your birthday won't be shown publicly",
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      isDarkMode(context)
+                          ? Colors.grey.shade300
+                          : Colors.black54,
+                ),
               ),
               Gaps.v16,
               TextField(
                 enabled: false,
+                style: TextStyle(
+                  color: isDarkMode(context) ? Colors.white : Colors.black,
+                ),
                 controller: _birthdayController,
                 decoration: InputDecoration(
-                  hintText: "Birthday",
-                  hintStyle: TextStyle(color: Colors.black54),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),
@@ -99,7 +107,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         bottomNavigationBar: BottomAppBar(
           height: 250,
           child: CupertinoDatePicker(
-            maximumDate: initialDate,
+            maximumDate: DateTime.now(),
             initialDateTime: initialDate,
             onDateTimeChanged: _onDateTimeChanged,
             mode: CupertinoDatePickerMode.date,

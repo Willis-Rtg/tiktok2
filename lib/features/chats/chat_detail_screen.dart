@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/utils.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   const ChatDetailScreen({super.key});
@@ -128,7 +129,12 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 children: [
                   Expanded(
                     child: TextField(
+                      style: TextStyle(
+                        color:
+                            isDarkMode(context) ? Colors.white : Colors.black,
+                      ),
                       controller: _textController,
+                      cursorColor: Theme.of(context).primaryColor,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Send a message...",
@@ -137,7 +143,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                           vertical: 4,
                           horizontal: 8,
                         ),
-                        fillColor: Colors.white,
+                        fillColor:
+                            isDarkMode(context)
+                                ? Colors.grey.shade800
+                                : Colors.white,
                         filled: true,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),

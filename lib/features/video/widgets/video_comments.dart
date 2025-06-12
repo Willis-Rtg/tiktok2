@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/utils.dart';
 
 class VideoComments extends StatefulWidget {
   const VideoComments({super.key});
@@ -33,13 +34,22 @@ class _VideoCommentsState extends State<VideoComments> {
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.grey.shade50,
+        backgroundColor:
+            isDarkMode(context) ? Colors.grey.shade900 : Colors.grey.shade50,
         appBar: AppBar(
-          backgroundColor: Colors.grey.shade50,
+          backgroundColor:
+              isDarkMode(context) ? Colors.grey.shade900 : Colors.grey.shade50,
           automaticallyImplyLeading: false,
           title: Text("Comments"),
           actionsPadding: EdgeInsets.only(right: 16),
-          actions: [FaIcon(FontAwesomeIcons.xmark)],
+          actions: [
+            GestureDetector(
+              onTap: () async {
+                Navigator.pop(context);
+              },
+              child: FaIcon(FontAwesomeIcons.xmark),
+            ),
+          ],
         ),
         body: GestureDetector(
           onTap: () {
@@ -52,10 +62,12 @@ class _VideoCommentsState extends State<VideoComments> {
             children: [
               Scrollbar(
                 controller: _scrollController,
+
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 60),
                   child: ListView.separated(
                     controller: _scrollController,
+
                     separatorBuilder: (context, index) => Gaps.v16,
                     padding: EdgeInsets.only(
                       top: 4,
@@ -84,12 +96,19 @@ class _VideoCommentsState extends State<VideoComments> {
                                     "Willis",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      color:
+                                          isDarkMode(context)
+                                              ? Colors.white
+                                              : Colors.black,
                                     ),
                                   ),
                                   Text(
                                     "lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit.lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                                     style: TextStyle(
-                                      color: Colors.grey.shade600,
+                                      color:
+                                          isDarkMode(context)
+                                              ? Colors.grey.shade300
+                                              : Colors.grey.shade600,
                                     ),
                                   ),
                                 ],
@@ -120,7 +139,10 @@ class _VideoCommentsState extends State<VideoComments> {
                 bottom: MediaQuery.of(context).viewInsets.bottom,
                 width: MediaQuery.of(context).size.width,
                 child: BottomAppBar(
-                  color: Colors.grey.shade100,
+                  color:
+                      isDarkMode(context)
+                          ? Colors.grey.shade900
+                          : Colors.grey.shade100,
                   child: Row(
                     children: [
                       CircleAvatar(
@@ -139,13 +161,17 @@ class _VideoCommentsState extends State<VideoComments> {
                           scrollPadding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom,
                           ),
+                          cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 12,
                               vertical: 8,
                             ),
                             hintStyle: TextStyle(
-                              color: Colors.grey.shade600,
+                              color:
+                                  isDarkMode(context)
+                                      ? Colors.grey.shade300
+                                      : Colors.grey.shade600,
                               fontSize: 16,
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -166,7 +192,10 @@ class _VideoCommentsState extends State<VideoComments> {
                             hintText: "Add a comment...",
                             border: InputBorder.none,
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor:
+                                isDarkMode(context)
+                                    ? Colors.grey.shade700
+                                    : Colors.white,
                             labelStyle: TextStyle(
                               color: Colors.grey.shade600,
                               fontSize: 16,

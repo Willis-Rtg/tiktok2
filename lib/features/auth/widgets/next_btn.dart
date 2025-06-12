@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiktok2/utils.dart';
 
 class NextBtn extends StatelessWidget {
   const NextBtn({
@@ -22,13 +23,24 @@ class NextBtn extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color:
-              disabled ? Colors.grey.shade400 : Theme.of(context).primaryColor,
+              disabled
+                  ? isDarkMode(context)
+                      ? Colors.grey.shade800
+                      : Colors.grey.shade400
+                  : Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Center(
           child: AnimatedDefaultTextStyle(
             duration: Duration(milliseconds: 300),
-            style: TextStyle(color: disabled ? Colors.black45 : Colors.white),
+            style: TextStyle(
+              color:
+                  disabled
+                      ? isDarkMode(context)
+                          ? Colors.grey.shade400
+                          : Colors.black45
+                      : Colors.white,
+            ),
             child: Text(text),
           ),
         ),
