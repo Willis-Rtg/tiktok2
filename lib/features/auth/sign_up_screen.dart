@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/username_screen.dart';
@@ -13,9 +14,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onLogInTap(BuildContext context) async {
-      final result = await Navigator.of(context).pushNamed("/login");
-
-      print(result);
+      context.push("/login");
       // final result = await Navigator.push(
       //   context,
       //   MaterialPageRoute(
@@ -29,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
     }
 
     void onEmailTap(BuildContext context) {
-      Navigator.of(context).pushNamed("/username");
+      context.push("/username");
 
       // Navigator.of(context).push(
       //   PageRouteBuilder(

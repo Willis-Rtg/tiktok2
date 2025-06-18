@@ -11,9 +11,9 @@ class EmailScreenArgs {
 }
 
 class EamilScreen extends StatefulWidget {
-  const EamilScreen({super.key});
+  const EamilScreen({super.key, required this.args});
 
-  // final String username;
+  final EmailScreenArgs args;
 
   @override
   State<EamilScreen> createState() => _EamilScreenState();
@@ -58,9 +58,7 @@ class _EamilScreenState extends State<EamilScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as EmailScreenArgs;
-
-    print(args.username);
+    print(widget.args.username);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),

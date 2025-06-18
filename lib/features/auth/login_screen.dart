@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/login_submit_screen.dart';
 import 'package:tiktok2/features/auth/widgets/social_btn.dart';
@@ -11,7 +12,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onSignUpTap() {
-      Navigator.of(context).pop("hello");
+      context.pop("hello");
     }
 
     return Scaffold(

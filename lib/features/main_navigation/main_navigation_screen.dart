@@ -5,18 +5,21 @@ import 'package:tiktok2/features/discover/discover_screen.dart';
 import 'package:tiktok2/features/inbox/inbox_screen.dart';
 import 'package:tiktok2/features/main_navigation/widgets/nav_tab.dart';
 import 'package:tiktok2/features/user/user_profile_screen.dart';
+import 'package:tiktok2/features/video/video_recording_screen.dart';
 import 'package:tiktok2/features/video/video_timeline_screen.dart';
 import 'package:tiktok2/utils.dart';
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+  const MainNavigationScreen({super.key, this.tab = 0});
+
+  final int tab;
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 4;
+  late int _selectedIndex;
 
   void onTap(int index) {
     setState(() {
@@ -27,10 +30,16 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   void onPostVideoBtnTap() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => Container(),
+        builder: (context) => VideoRecordingScreen(),
         fullscreenDialog: true,
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.tab;
   }
 
   @override
@@ -46,11 +55,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             child: VideoTimelineScreen(),
           ),
           Offstage(offstage: _selectedIndex != 1, child: DiscoverScreen()),
-          Offstage(offstage: _selectedIndex != 2, child: DiscoverScreen()),
+          Offstage(offstage: _selectedIndex != 2, child: Container()),
           Offstage(offstage: _selectedIndex != 3, child: InboxScreen()),
           Offstage(
             offstage: _selectedIndex != 4,
-            child: UserProfileScreen(toFollow: false),
+            child: UserProfileScreen(toFollow: false, username: "willis"),
           ),
         ],
       ),

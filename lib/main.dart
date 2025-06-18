@@ -7,6 +7,7 @@ import 'package:tiktok2/features/auth/sign_up_screen.dart';
 import 'package:tiktok2/features/auth/username_screen.dart';
 import 'package:tiktok2/features/onboarding/interests_screen.dart';
 import 'package:tiktok2/features/onboarding/tutorial_screen.dart';
+import 'package:tiktok2/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,7 @@ class TiktokApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Tiktok',
       themeMode: ThemeMode.system,
@@ -64,15 +65,7 @@ class TiktokApp extends StatelessWidget {
         ),
         // splashColor: Color(0xFFE9435A),
       ),
-      routes: {
-        "/": (context) => SignUpScreen(),
-        "/login": (context) => LoginScreen(),
-        "/username": (context) => UsernameScreen(),
-        "/email": (context) => EamilScreen(),
-        "/birthday": (context) => BirthdayScreen(),
-        "/interests": (context) => InterestsScreen(),
-        "/onboarding": (context) => TutorialScreen(),
-      },
+      routerConfig: router,
     );
   }
 }

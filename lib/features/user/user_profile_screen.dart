@@ -8,8 +8,13 @@ import 'package:tiktok2/features/user/widgets/persistent_tabbar_header.dart';
 import 'package:tiktok2/utils.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key, required this.toFollow});
+  const UserProfileScreen({
+    super.key,
+    required this.toFollow,
+    required this.username,
+  });
 
+  final String username;
   final bool toFollow;
 
   @override

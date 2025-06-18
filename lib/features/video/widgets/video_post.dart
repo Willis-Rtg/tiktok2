@@ -29,6 +29,15 @@ class _VideoPostState extends State<VideoPost>
   bool _isPlaying = true;
   late final AnimationController _animationController;
 
+  void _onVideoChange() {
+    if (_videoPlayerController.value.isInitialized) {
+      if (_videoPlayerController.value.duration ==
+          _videoPlayerController.value.position) {
+        widget.onVideoFinished();
+      }
+    }
+  }
+
   void _initVideoPlayer() async {
     if (!mounted) return;
     await _videoPlayerController.initialize();
@@ -37,6 +46,7 @@ class _VideoPostState extends State<VideoPost>
     if (kIsWeb) {
       _videoPlayerController.setVolume(0);
     }
+    _videoPlayerController.addListener(_onVideoChange);
     setState(() {});
   }
 
@@ -100,9 +110,11 @@ class _VideoPostState extends State<VideoPost>
   @override
   void dispose() {
     if (!mounted) return;
+
     if (_videoPlayerController.value.isInitialized) {
       _videoPlayerController.dispose();
     }
+
     _animationController.dispose();
     super.dispose();
   }
@@ -136,7 +148,24 @@ class _VideoPostState extends State<VideoPost>
           Positioned.fill(
             child:
                 _videoPlayerController.value.isInitialized
-                    ? VideoPlayer(_videoPlayerController)
+                    ? Stack(
+                      children: [
+                        Positioned(
+                          top: 0,
+                          left: -MediaQuery.of(context).size.width / 2,
+                          right: -MediaQuery.of(context).size.width / 2,
+                          bottom: 0,
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: SizedBox(
+                              width: _videoPlayerController.value.size.width,
+                              height: _videoPlayerController.value.size.height,
+                              child: VideoPlayer(_videoPlayerController),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                     : Container(color: Colors.black),
           ),
           Positioned.fill(child: GestureDetector(onTap: _onTogglePause)),
