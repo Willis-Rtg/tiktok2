@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:tiktok2/common/video_config/config.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/features/video/vm/playback_config_vm.dart';
 import 'package:tiktok2/features/video/widgets/video_btn.dart';
 import 'package:tiktok2/features/video/widgets/video_comments.dart';
 import 'package:tiktok2/utils.dart';
@@ -41,12 +44,21 @@ class _VideoPostState extends State<VideoPost>
   void _initVideoPlayer() async {
     if (!mounted) return;
     await _videoPlayerController.initialize();
-    _videoPlayerController.play();
-    _isPlaying = true;
+    if (context.read<PlaybackConfigVm>().autoPlay) {
+      _videoPlayerController.play();
+      _isPlaying = true;
+    }
     if (kIsWeb) {
       _videoPlayerController.setVolume(0);
     }
     _videoPlayerController.addListener(_onVideoChange);
+
+    if (context.read<PlaybackConfigVm>().muted) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
+
     setState(() {});
   }
 
@@ -62,6 +74,7 @@ class _VideoPostState extends State<VideoPost>
       _videoPlayerController.play();
       _animationController.forward();
     }
+
     setState(() {});
   }
 
@@ -76,6 +89,46 @@ class _VideoPostState extends State<VideoPost>
       // backgroundColor: isDarkMode(context) ? Colors.black : Colors.white,
     );
     _onTogglePause();
+  }
+
+  void toggleVolume() {
+    if (!mounted) return;
+    // context.read<PlaybackConfigVm>().setMuted(
+    //   !context.read<PlaybackConfigVm>().muted,
+    // );
+    if (_videoPlayerController.value.isInitialized) {
+      if (_videoPlayerController.value.volume == 0) {
+        _videoPlayerController.setVolume(1);
+      } else {
+        _videoPlayerController.setVolume(0);
+      }
+    }
+    setState(() {});
+  }
+
+  void _onVisibilityChanged(VisibilityInfo visibilityInfo) {
+    // if (visibilityInfo.visibleFraction == 0 &&
+    //     _videoPlayerController.value.isPlaying &&
+    //     !_isPlaying) {
+    //   _videoPlayerController.pause();
+    // } else if (visibilityInfo.visibleFraction == 1 &&
+    //     !_videoPlayerController.value.isPlaying &&
+    //     _isPlaying) {
+    //   if (context.read<PlaybackConfigVm>().autoPlay) {
+    //     _videoPlayerController.play();
+    //   }
+    // }
+    if (visibilityInfo.visibleFraction == 0 &&
+        _videoPlayerController.value.isInitialized &&
+        _videoPlayerController.value.isPlaying) {
+      _onTogglePause();
+    } else if (visibilityInfo.visibleFraction == 1 &&
+        _videoPlayerController.value.isInitialized &&
+        !_videoPlayerController.value.isPlaying) {
+      if (context.read<PlaybackConfigVm>().autoPlay) {
+        _onTogglePause();
+      }
+    }
   }
 
   @override
@@ -95,18 +148,6 @@ class _VideoPostState extends State<VideoPost>
     // });
   }
 
-  void toggleVolume() {
-    if (!mounted) return;
-    if (_videoPlayerController.value.isInitialized) {
-      if (_videoPlayerController.value.volume == 0) {
-        _videoPlayerController.setVolume(1);
-      } else {
-        _videoPlayerController.setVolume(0);
-      }
-    }
-    setState(() {});
-  }
-
   @override
   void dispose() {
     if (!mounted) return;
@@ -115,6 +156,7 @@ class _VideoPostState extends State<VideoPost>
       _videoPlayerController.dispose();
     }
 
+    _videoPlayerController.removeListener(_onVideoChange);
     _animationController.dispose();
     super.dispose();
   }
@@ -123,26 +165,7 @@ class _VideoPostState extends State<VideoPost>
   Widget build(BuildContext context) {
     return VisibilityDetector(
       key: Key("video_post_${widget.index}"),
-      onVisibilityChanged: (visibilityInfo) {
-        if (visibilityInfo.visibleFraction == 0 &&
-            _videoPlayerController.value.isPlaying &&
-            !_isPlaying) {
-          _videoPlayerController.pause();
-        } else if (visibilityInfo.visibleFraction == 1 &&
-            !_videoPlayerController.value.isPlaying &&
-            _isPlaying) {
-          _videoPlayerController.play();
-        }
-        if (visibilityInfo.visibleFraction == 0 &&
-            _videoPlayerController.value.isInitialized &&
-            _videoPlayerController.value.isPlaying) {
-          _onTogglePause();
-        } else if (visibilityInfo.visibleFraction == 1 &&
-            _videoPlayerController.value.isInitialized &&
-            !_videoPlayerController.value.isPlaying) {
-          _onTogglePause();
-        }
-      },
+      onVisibilityChanged: _onVisibilityChanged,
       child: Stack(
         children: [
           Positioned.fill(
@@ -225,7 +248,7 @@ class _VideoPostState extends State<VideoPost>
                           ? FontAwesomeIcons.volumeOff
                           : FontAwesomeIcons.volumeHigh,
                   onTap: toggleVolume,
-                  text: "off",
+                  text: _videoPlayerController.value.volume == 0 ? "off" : "on",
                 ),
                 Gaps.v16,
                 CircleAvatar(

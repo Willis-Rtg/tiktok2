@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/features/chats/chat_detail_screen.dart';
 
 class ChatsScreen extends StatefulWidget {
@@ -31,9 +32,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
   }
 
   void onChatTap() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => ChatDetailScreen()));
+    context.push("/inbox/chats/vreko");
   }
 
   Widget _makeTile(int index) {

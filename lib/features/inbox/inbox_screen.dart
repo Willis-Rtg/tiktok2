@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/features/chats/chats_screen.dart';
 import 'package:tiktok2/features/inbox/activity_screen.dart';
 
@@ -12,16 +13,11 @@ class InboxScreen extends StatefulWidget {
 
 class _InboxScreenState extends State<InboxScreen> {
   void _onDMPressed() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => ChatsScreen()));
+    context.push("/inbox/chats");
   }
 
   void _onActivityTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ActivityScreen()),
-    );
+    context.push("/inbox/activity");
   }
 
   @override

@@ -4,7 +4,8 @@ import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/utils.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({super.key});
+  const ChatDetailScreen({super.key, required this.id});
+  final int id;
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();

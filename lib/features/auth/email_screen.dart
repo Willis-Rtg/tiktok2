@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/password_screen.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
@@ -35,9 +36,7 @@ class _EamilScreenState extends State<EamilScreen> {
 
   void _onSubmit() {
     if (_email.isEmpty || _isEmailValid() != null) return;
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => PasswordScreen()));
+    context.push("/auth/password");
   }
 
   @override

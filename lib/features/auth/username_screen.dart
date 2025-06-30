@@ -29,7 +29,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
   void onNextTap(BuildContext context) {
     if (_username.isEmpty) return;
-    context.push("/email", extra: EmailScreenArgs(username: _username));
+    context.push("/auth/email", extra: EmailScreenArgs(username: _username));
   }
 
   @override

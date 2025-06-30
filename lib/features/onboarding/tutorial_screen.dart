@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
 import 'package:tiktok2/features/main_navigation/main_navigation_screen.dart';
@@ -215,12 +216,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   disabled: currentPage == ECurrentPage.first,
                   text: "Next",
                   fn: (context) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => const MainNavigationScreen(),
-                      ),
-                      (route) => false,
-                    );
+                    context.go("/home");
                   },
                 ),
               ),

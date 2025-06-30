@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/birthday_screen.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
@@ -24,9 +25,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   void _onSubmit() {
     if (!_isPasswordValid()) return;
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => BirthdayScreen()));
+    context.push("/auth/birthday");
   }
 
   @override

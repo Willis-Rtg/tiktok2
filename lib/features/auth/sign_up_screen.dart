@@ -14,7 +14,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onLogInTap(BuildContext context) async {
-      context.push("/login");
+      context.push("/auth/login");
       // final result = await Navigator.push(
       //   context,
       //   MaterialPageRoute(
@@ -28,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
     }
 
     void onEmailTap(BuildContext context) {
-      context.push("/username");
+      context.push("/auth/username");
 
       // Navigator.of(context).push(
       //   PageRouteBuilder(

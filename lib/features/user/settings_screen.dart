@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tiktok2/common/video_config/config.dart';
 import 'package:tiktok2/constants/breakpoints.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/features/video/vm/playback_config_vm.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -69,6 +72,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 CupertinoActivityIndicator(),
                 CircularProgressIndicator.adaptive(),
                 Gaps.v52,
+
+                ListTile(
+                  title: Text("Auto Muted"),
+                  subtitle: Text("Auto Muted"),
+                  trailing: Switch.adaptive(
+                    value: context.watch<PlaybackConfigVm>().muted,
+                    onChanged: (value) {
+                      context.read<PlaybackConfigVm>().setMuted(value);
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: Text("Auto Play"),
+                  subtitle: Text("Auto Play"),
+                  trailing: Switch.adaptive(
+                    value: context.watch<PlaybackConfigVm>().autoPlay,
+                    onChanged: (value) {
+                      context.read<PlaybackConfigVm>().setAutoPlay(value);
+                    },
+                  ),
+                ),
+
                 ListTile(
                   title: Text("Abouut..."),
                   subtitle: Text("About TikTok"),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
 import 'package:tiktok2/features/onboarding/tutorial_screen.dart';
@@ -180,9 +181,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               disabled: false,
               text: "Next",
               fn: (context) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => TutorialScreen()),
-                );
+                context.push("/tutorial");
               },
             ),
           ),

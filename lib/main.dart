@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tiktok2/common/video_config/config.dart';
 import 'package:tiktok2/features/auth/birthday_screen.dart';
 import 'package:tiktok2/features/auth/email_screen.dart';
 import 'package:tiktok2/features/auth/login_screen.dart';
@@ -7,6 +10,8 @@ import 'package:tiktok2/features/auth/sign_up_screen.dart';
 import 'package:tiktok2/features/auth/username_screen.dart';
 import 'package:tiktok2/features/onboarding/interests_screen.dart';
 import 'package:tiktok2/features/onboarding/tutorial_screen.dart';
+import 'package:tiktok2/features/video/repos/playback_config_repo.dart';
+import 'package:tiktok2/features/video/vm/playback_config_vm.dart';
 import 'package:tiktok2/router.dart';
 
 void main() async {
@@ -14,7 +19,19 @@ void main() async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  runApp(const TiktokApp());
+  FlutterError.onError = (FlutterErrorDetails details) {};
+
+  final perferences = await SharedPreferences.getInstance();
+  final repo = PlaybackConfigRepo(perferences);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PlaybackConfigVm(repo)),
+      ],
+      child: const TiktokApp(),
+    ),
+  );
 }
 
 class TiktokApp extends StatelessWidget {

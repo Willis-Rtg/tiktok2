@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
 import 'package:tiktok2/features/onboarding/interests_screen.dart';
@@ -29,10 +30,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void onNextTap(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => InterestsScreen()),
-      (route) => false,
-    );
+    context.push("/interests");
   }
 
   void _onDateTimeChanged(DateTime dateTime) {

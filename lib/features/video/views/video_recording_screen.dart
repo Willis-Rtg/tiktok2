@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tiktok2/constants/gaps.dart';
-import 'package:tiktok2/features/video/video_preview_screen.dart';
+import 'package:tiktok2/features/video/views/video_preview_screen.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
   const VideoRecordingScreen({super.key});
@@ -25,6 +29,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     Icons.flash_auto_rounded,
   ];
   late int _flashModeIndex;
+  late final bool _noCamera = kDebugMode && Platform.isIOS;
 
   late CameraController _cameraController;
   late final AnimationController _buttonAnimationController =
@@ -49,6 +54,8 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   ).animate(_recordingAnimationController);
 
   Future<void> initCamera() async {
+    if (!mounted) return;
+    if (_noCamera) return;
     final cameras = await availableCameras();
 
     if (cameras.isEmpty) return;
@@ -90,6 +97,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   }
 
   Future<void> setFlashMode(FlashMode newFlashMode) async {
+    if (_noCamera) return;
     _cameraController.setFlashMode(newFlashMode);
     _flashMode = newFlashMode;
     _flashModeIndex++;
@@ -98,6 +106,8 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
 
   Future<void> _startRecording(TapDownDetails details) async {
     if (!mounted) return;
+    if (_noCamera) return;
+    if (!_cameraController.value.isInitialized) return;
     if (_cameraController.value.isRecordingVideo) return;
     await _cameraController.startVideoRecording();
     _buttonAnimationController.forward();
@@ -105,6 +115,9 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   }
 
   Future<void> _stopRecording() async {
+    if (!mounted) return;
+    if (_noCamera) return;
+    if (!_cameraController.value.isInitialized) return;
     if (!_cameraController.value.isRecordingVideo) return;
 
     _buttonAnimationController.reverse();
@@ -126,19 +139,19 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     if (video == null) return;
 
     // print(video);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VideoPreviewScreen(file: video, isPicked: true),
-      ),
-    );
+    context.push("/video/preview", extra: video);
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (!_hasPermission) initPermissions();
+    if (!_noCamera) {
+      if (!_hasPermission) initPermissions();
+    } else {
+      _hasPermission = true;
+      setState(() {});
+    }
     _recordingAnimationController.addListener(() {
       setState(() {});
     });
@@ -151,7 +164,9 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    if (!_noCamera && _cameraController.value.isInitialized) {
+      _cameraController.dispose();
+    }
     _buttonAnimationController.dispose();
     _recordingAnimationController.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -160,6 +175,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (_noCamera) return;
     if (!_hasPermission) return;
     if (!_cameraController.value.isInitialized) return;
     if (state == AppLifecycleState.inactive) {
@@ -182,7 +198,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child:
-            !_hasPermission || !_cameraController.value.isInitialized
+            !_hasPermission
                 ? Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -198,7 +214,8 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                 : Stack(
                   alignment: Alignment.center,
                   children: [
-                    Center(child: CameraPreview(_cameraController)),
+                    if (!_noCamera && _cameraController.value.isInitialized)
+                      Center(child: CameraPreview(_cameraController)),
                     Positioned(
                       top: 32,
                       left: 0,
@@ -208,26 +225,32 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                         icon: FaIcon(FontAwesomeIcons.xmark),
                       ),
                     ),
-                    Positioned(
-                      top: 32,
-                      left: 36,
-                      child: IconButton(
-                        color: Colors.white,
-                        onPressed: toggleSelfieMode,
-                        icon: FaIcon(FontAwesomeIcons.cameraRotate),
+                    if (!_noCamera)
+                      Stack(
+                        children: [
+                          Positioned(
+                            top: 32,
+                            left: 36,
+                            child: IconButton(
+                              color: Colors.white,
+                              onPressed: toggleSelfieMode,
+                              icon: FaIcon(FontAwesomeIcons.cameraRotate),
+                            ),
+                          ),
+                          Positioned(
+                            top: 32,
+                            left: 72,
+                            child: IconButton(
+                              color: Colors.white,
+                              onPressed:
+                                  () => setFlashMode(
+                                    _flashModes[_flashModeIndex % 3],
+                                  ),
+                              icon: Icon(_flashModeIcons[_flashModeIndex % 3]),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Positioned(
-                      top: 32,
-                      left: 72,
-                      child: IconButton(
-                        color: Colors.white,
-                        onPressed:
-                            () =>
-                                setFlashMode(_flashModes[_flashModeIndex % 3]),
-                        icon: Icon(_flashModeIcons[_flashModeIndex % 3]),
-                      ),
-                    ),
                     Positioned(
                       bottom: MediaQuery.of(context).size.height * 0.1,
                       width: MediaQuery.of(context).size.width,
