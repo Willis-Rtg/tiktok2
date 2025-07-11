@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tiktok2/common/video_config/config.dart';
@@ -11,7 +12,7 @@ import 'package:tiktok2/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class VideoPost extends StatefulWidget {
+class VideoPost extends ConsumerStatefulWidget {
   final Function onVideoFinished;
   final int index;
 
@@ -22,10 +23,10 @@ class VideoPost extends StatefulWidget {
   });
 
   @override
-  State<VideoPost> createState() => _VideoPostState();
+  _VideoPostState createState() => _VideoPostState();
 }
 
-class _VideoPostState extends State<VideoPost>
+class _VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   late final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/video1.mp4");
@@ -44,7 +45,7 @@ class _VideoPostState extends State<VideoPost>
   void _initVideoPlayer() async {
     if (!mounted) return;
     await _videoPlayerController.initialize();
-    if (context.read<PlaybackConfigVm>().autoPlay) {
+    if (ref.watch(playbackConfigProvider).autoPlay) {
       _videoPlayerController.play();
       _isPlaying = true;
     }
@@ -53,7 +54,7 @@ class _VideoPostState extends State<VideoPost>
     }
     _videoPlayerController.addListener(_onVideoChange);
 
-    if (context.read<PlaybackConfigVm>().muted) {
+    if (ref.watch(playbackConfigProvider).muted) {
       _videoPlayerController.setVolume(0);
     } else {
       _videoPlayerController.setVolume(1);
@@ -93,9 +94,10 @@ class _VideoPostState extends State<VideoPost>
 
   void toggleVolume() {
     if (!mounted) return;
-    // context.read<PlaybackConfigVm>().setMuted(
-    //   !context.read<PlaybackConfigVm>().muted,
-    // );
+    ref
+        .read(playbackConfigProvider.notifier)
+        .setMuted(!ref.read(playbackConfigProvider).muted);
+
     if (_videoPlayerController.value.isInitialized) {
       if (_videoPlayerController.value.volume == 0) {
         _videoPlayerController.setVolume(1);
@@ -125,7 +127,7 @@ class _VideoPostState extends State<VideoPost>
     } else if (visibilityInfo.visibleFraction == 1 &&
         _videoPlayerController.value.isInitialized &&
         !_videoPlayerController.value.isPlaying) {
-      if (context.read<PlaybackConfigVm>().autoPlay) {
+      if (ref.read(playbackConfigProvider).autoPlay) {
         _onTogglePause();
       }
     }

@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gal/gal.dart';
+import 'package:tiktok2/features/video/models/video_model.dart';
 import 'package:tiktok2/features/video/views/video_recording_screen.dart';
+import 'package:tiktok2/features/video/vm/timeline_vm.dart';
+import 'package:tiktok2/utils.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPreviewScreen extends StatefulWidget {
+class VideoPreviewScreen extends ConsumerStatefulWidget {
   const VideoPreviewScreen({
     super.key,
     required this.file,
@@ -18,10 +22,10 @@ class VideoPreviewScreen extends StatefulWidget {
   final bool isPicked;
 
   @override
-  State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
+  ConsumerState<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
 }
 
-class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
+class _VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   late final VideoPlayerController _videoPlayerController;
   bool _isSaving = false;
 
@@ -41,6 +45,10 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     _isSaving = true;
 
     setState(() {});
+  }
+
+  Future<void> _uploadPressed(file) async {
+    ref.read(timelineProvider.notifier).addVideo(VideoModel(title: file.name));
   }
 
   @override
@@ -70,6 +78,19 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                 _isSaving ? FontAwesomeIcons.check : FontAwesomeIcons.download,
               ),
             ),
+          IconButton(
+            onPressed:
+                ref.watch(timelineProvider).isLoading
+                    ? null
+                    : () => _uploadPressed(widget.file),
+            icon:
+                ref.watch(timelineProvider).isLoading
+                    ? const CircularProgressIndicator()
+                    : FaIcon(
+                      FontAwesomeIcons.cloudArrowUp,
+                      color: isDarkMode(context) ? Colors.white : Colors.black,
+                    ),
+          ),
         ],
       ),
       body:

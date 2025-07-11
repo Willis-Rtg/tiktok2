@@ -87,6 +87,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
         currentIndex: _tabController.index,
         onTap: (index) {
           _tabController.animateTo(index);
+          _tabController.index = index;
           setState(() {});
         },
         // elevation: 2,

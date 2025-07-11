@@ -1,26 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'package:tiktok2/common/video_config/config.dart';
 import 'package:tiktok2/constants/breakpoints.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/video/vm/playback_config_vm.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
-
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notification = false;
-
-  void _changeNotification(bool? value) {
-    setState(() {
-      _notification = value!;
-    });
-  }
 
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -35,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text("Settings")),
       body: SingleChildScrollView(
@@ -77,9 +65,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: Text("Auto Muted"),
                   subtitle: Text("Auto Muted"),
                   trailing: Switch.adaptive(
-                    value: context.watch<PlaybackConfigVm>().muted,
+                    value: ref.watch(playbackConfigProvider).muted,
                     onChanged: (value) {
-                      context.read<PlaybackConfigVm>().setMuted(value);
+                      ref.read(playbackConfigProvider.notifier).setMuted(value);
                     },
                   ),
                 ),
@@ -87,9 +75,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: Text("Auto Play"),
                   subtitle: Text("Auto Play"),
                   trailing: Switch.adaptive(
-                    value: context.watch<PlaybackConfigVm>().autoPlay,
+                    value: ref.watch(playbackConfigProvider).autoPlay,
                     onChanged: (value) {
-                      context.read<PlaybackConfigVm>().setAutoPlay(value);
+                      ref
+                          .read(playbackConfigProvider.notifier)
+                          .setAutoPlay(value);
                     },
                   ),
                 ),
@@ -147,19 +137,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     print(dateRange);
                   },
                 ),
-                CupertinoSwitch(
-                  value: _notification,
-                  onChanged: _changeNotification,
-                ),
+                CupertinoSwitch(value: false, onChanged: (value) {}),
                 SwitchListTile(
                   title: Text("Notification"),
-                  value: _notification,
-                  onChanged: _changeNotification,
+                  value: false,
+                  onChanged: (value) {},
                 ),
                 CheckboxListTile(
                   title: Text("Notification"),
-                  value: _notification,
-                  onChanged: _changeNotification,
+                  value: false,
+                  onChanged: (value) {},
                 ),
                 ListTile(
                   title: Text(

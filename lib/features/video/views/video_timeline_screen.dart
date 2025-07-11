@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tiktok2/features/video/vm/timeline_vm.dart';
 import 'package:tiktok2/features/video/widgets/video_post.dart';
 
-class VideoTimelineScreen extends StatefulWidget {
+class VideoTimelineScreen extends ConsumerStatefulWidget {
   const VideoTimelineScreen({super.key});
 
   @override
-  State<VideoTimelineScreen> createState() => _VideoTimelineScreenState();
+  ConsumerState<VideoTimelineScreen> createState() =>
+      _VideoTimelineScreenState();
 }
 
-class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
+class _VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
   int _itemCount = 4;
 
   final PageController _pageController = PageController();
@@ -46,17 +49,32 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      child: PageView.builder(
-        scrollDirection: Axis.vertical,
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        itemCount: _itemCount,
-        itemBuilder:
-            (context, index) =>
-                VideoPost(onVideoFinished: _onVideoFinished, index: index),
-      ),
-    );
+    return ref
+        .watch(timelineProvider)
+        .when(
+          loading: () => Center(child: CircularProgressIndicator()),
+          error:
+              (error, stackTrace) => Center(
+                child: Text(
+                  "Could not load videos: ${error.toString()}",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+          data:
+              (data) => RefreshIndicator(
+                onRefresh: _onRefresh,
+                child: PageView.builder(
+                  scrollDirection: Axis.vertical,
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  itemCount: data.length,
+                  itemBuilder:
+                      (context, index) => VideoPost(
+                        onVideoFinished: _onVideoFinished,
+                        index: index,
+                      ),
+                ),
+              ),
+        );
   }
 }
