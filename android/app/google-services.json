@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "402801541323",
+    "project_id": "tiktok2-willis-abc",
+    "storage_bucket": "tiktok2-willis-abc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402801541323:android:1b68d3923f1bca619d1b4e",
+        "android_client_info": {
+          "package_name": "com.example.tiktok2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5eIUM7nMisWYUUbsBlaZEzC3BRS3mV_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
