@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/features/auth/vm/login_vm.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
-import 'package:tiktok2/features/onboarding/interests_screen.dart';
 
-class LoginSubmitScreen extends StatefulWidget {
+class LoginSubmitScreen extends ConsumerStatefulWidget {
   const LoginSubmitScreen({super.key});
 
   @override
-  State<LoginSubmitScreen> createState() => _LoginSubmitScreenState();
+  ConsumerState<LoginSubmitScreen> createState() => _LoginSubmitScreenState();
 }
 
-class _LoginSubmitScreenState extends State<LoginSubmitScreen> {
+class _LoginSubmitScreenState extends ConsumerState<LoginSubmitScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Map<String, String> formData = {};
 
   void _onSubmitTap() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      context.push("/interests");
+      ref
+          .read(loginProvider.notifier)
+          .login(formData["email"]!, formData["password"]!, context);
+      // context.push("/interests");
     }
   }
 
@@ -55,7 +58,7 @@ class _LoginSubmitScreenState extends State<LoginSubmitScreen> {
               ),
               Gaps.v24,
               NextBtn(
-                disabled: false,
+                disabled: ref.watch(loginProvider).isLoading,
                 text: "Login",
                 fn: (context) {
                   _onSubmitTap();

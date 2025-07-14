@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/features/auth/models/signup_form_model.dart';
+import 'package:tiktok2/features/auth/vm/signup_vm.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
-import 'package:tiktok2/features/onboarding/interests_screen.dart';
 import 'package:tiktok2/utils.dart';
 
-class BirthdayScreen extends StatefulWidget {
+class BirthdayScreen extends ConsumerStatefulWidget {
   const BirthdayScreen({super.key});
 
   @override
-  State<BirthdayScreen> createState() => _BirthdayScreenState();
+  ConsumerState<BirthdayScreen> createState() => _BirthdayScreenState();
 }
 
-class _BirthdayScreenState extends State<BirthdayScreen> {
+class _BirthdayScreenState extends ConsumerState<BirthdayScreen> {
   final TextEditingController _birthdayController = TextEditingController();
 
   DateTime initialDate = DateTime.now();
@@ -30,10 +32,17 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void onNextTap(BuildContext context) {
-    context.push("/interests");
+    ref.read(signupProvider.notifier).signup(context);
+    // context.push("/interests");
   }
 
   void _onDateTimeChanged(DateTime dateTime) {
+    ref.read(signupFormProvider.notifier).state = SignupFormModel(
+      email: ref.read(signupFormProvider).email,
+      password: ref.read(signupFormProvider).password,
+      username: ref.read(signupFormProvider).username,
+      birthday: dateTime,
+    );
     setState(() {
       initialDate = dateTime;
       setDate();
@@ -95,7 +104,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               Gaps.v16,
               NextBtn(
                 disabled:
-                    _birthdayController.value.text == DateTime.now().toString(),
+                    _birthdayController.value.text ==
+                        DateTime.now().toString() ||
+                    ref.read(signupProvider).isLoading,
                 text: "Next",
                 fn: onNextTap,
               ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
-import 'package:tiktok2/features/onboarding/tutorial_screen.dart';
 import 'package:tiktok2/features/onboarding/widgets/interest_btn.dart';
 
 const interests = [

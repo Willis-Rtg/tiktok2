@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/login_submit_screen.dart';
+import 'package:tiktok2/features/auth/vm/social_auth_vm.dart';
 import 'package:tiktok2/features/auth/widgets/social_btn.dart';
 import 'package:tiktok2/utils.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  @override
   Widget build(BuildContext context) {
     void onSignUpTap() {
-      context.pop("hello");
+      context.pop();
     }
 
     return Scaffold(
@@ -51,10 +58,12 @@ class LoginScreen extends StatelessWidget {
               ),
               Gaps.v12,
               SocialBtn(
-                text: "Continue with Apple",
+                text: "Continue with github",
                 color: isDarkMode(context) ? Colors.black : Colors.white,
-                onTap: () {},
-                icon: FontAwesomeIcons.apple,
+                onTap: () {
+                  ref.read(socialAuthProvider.notifier).githubLogin(context);
+                },
+                icon: FontAwesomeIcons.github,
               ),
               Gaps.v12,
               SocialBtn(

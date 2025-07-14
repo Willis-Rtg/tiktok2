@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
-import 'package:tiktok2/features/main_navigation/main_navigation_screen.dart';
 import 'package:tiktok2/utils.dart';
 
 class TutorialScreen extends StatefulWidget {

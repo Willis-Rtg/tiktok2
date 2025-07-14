@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
-import 'package:tiktok2/common/video_config/config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/breakpoints.dart';
 import 'package:tiktok2/constants/gaps.dart';
+import 'package:tiktok2/features/auth/repos/auth_repo.dart';
 import 'package:tiktok2/features/video/vm/playback_config_vm.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -191,7 +191,11 @@ class SettingsScreen extends ConsumerWidget {
                                 onPressed: () => Navigator.pop(context),
                               ),
                               TextButton(
-                                onPressed: () => Navigator.pop(context),
+                                onPressed:
+                                    () => {
+                                      ref.read(authRepoProvider).signout(),
+                                      context.go("/auth/signup"),
+                                    },
                                 child: Text(
                                   "Logout",
                                   style: TextStyle(color: Colors.red),

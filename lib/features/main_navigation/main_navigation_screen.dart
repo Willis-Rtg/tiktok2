@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tiktok2/constants/gaps.dart';
 import 'package:tiktok2/features/discover/discover_screen.dart';
 import 'package:tiktok2/features/inbox/inbox_screen.dart';
-import 'package:tiktok2/features/main_navigation/widgets/nav_tab.dart';
 import 'package:tiktok2/features/user/user_profile_screen.dart';
-import 'package:tiktok2/features/video/views/video_recording_screen.dart';
 import 'package:tiktok2/features/video/views/video_timeline_screen.dart';
 import 'package:tiktok2/utils.dart';
 

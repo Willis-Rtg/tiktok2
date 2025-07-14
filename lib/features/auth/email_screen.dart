@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
-import 'package:tiktok2/features/auth/password_screen.dart';
+import 'package:tiktok2/features/auth/models/signup_form_model.dart';
+import 'package:tiktok2/features/auth/vm/signup_vm.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
 import 'package:tiktok2/utils.dart';
 
@@ -11,16 +13,16 @@ class EmailScreenArgs {
   const EmailScreenArgs({required this.username});
 }
 
-class EamilScreen extends StatefulWidget {
+class EamilScreen extends ConsumerStatefulWidget {
   const EamilScreen({super.key, required this.args});
 
   final EmailScreenArgs args;
 
   @override
-  State<EamilScreen> createState() => _EamilScreenState();
+  ConsumerState<EamilScreen> createState() => _EamilScreenState();
 }
 
-class _EamilScreenState extends State<EamilScreen> {
+class _EamilScreenState extends ConsumerState<EamilScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   String _email = "";
@@ -35,6 +37,13 @@ class _EamilScreenState extends State<EamilScreen> {
   }
 
   void _onSubmit() {
+    final state = ref.read(signupFormProvider);
+    ref.read(signupFormProvider.notifier).state = SignupFormModel(
+      email: _email,
+      password: state.password,
+      username: widget.args.username,
+      birthday: state.birthday,
+    );
     if (_email.isEmpty || _isEmailValid() != null) return;
     context.push("/auth/password");
   }

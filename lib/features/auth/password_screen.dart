@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok2/constants/gaps.dart';
-import 'package:tiktok2/features/auth/birthday_screen.dart';
+import 'package:tiktok2/features/auth/models/signup_form_model.dart';
+import 'package:tiktok2/features/auth/vm/signup_vm.dart';
 import 'package:tiktok2/features/auth/widgets/next_btn.dart';
 import 'package:tiktok2/utils.dart';
 
-class PasswordScreen extends StatefulWidget {
+class PasswordScreen extends ConsumerStatefulWidget {
   const PasswordScreen({super.key});
 
   @override
-  State<PasswordScreen> createState() => _PasswordScreenState();
+  ConsumerState<PasswordScreen> createState() => _PasswordScreenState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class _PasswordScreenState extends ConsumerState<PasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   String _password = "";
@@ -25,6 +27,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   void _onSubmit() {
     if (!_isPasswordValid()) return;
+    final state = ref.read(signupFormProvider);
+    ref.read(signupFormProvider.notifier).state = SignupFormModel(
+      email: state.email,
+      password: _password,
+      username: state.username,
+      birthday: state.birthday,
+    );
     context.push("/auth/birthday");
   }
 

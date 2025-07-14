@@ -1,18 +1,12 @@
+// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tiktok2/common/video_config/config.dart';
-import 'package:tiktok2/features/auth/birthday_screen.dart';
-import 'package:tiktok2/features/auth/email_screen.dart';
-import 'package:tiktok2/features/auth/login_screen.dart';
-import 'package:tiktok2/features/auth/sign_up_screen.dart';
-import 'package:tiktok2/features/auth/username_screen.dart';
-import 'package:tiktok2/features/onboarding/interests_screen.dart';
-import 'package:tiktok2/features/onboarding/tutorial_screen.dart';
 import 'package:tiktok2/features/video/repos/playback_config_repo.dart';
 import 'package:tiktok2/features/video/vm/playback_config_vm.dart';
+import 'package:tiktok2/firebase_options.dart';
 import 'package:tiktok2/router.dart';
 
 void main() async {
@@ -25,6 +19,8 @@ void main() async {
   final perferences = await SharedPreferences.getInstance();
   final repo = PlaybackConfigRepo(perferences);
 
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
     ProviderScope(
       overrides: [
@@ -35,11 +31,11 @@ void main() async {
   );
 }
 
-class TiktokApp extends StatelessWidget {
+class TiktokApp extends ConsumerWidget {
   const TiktokApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Tiktok',
@@ -83,7 +79,7 @@ class TiktokApp extends StatelessWidget {
         ),
         // splashColor: Color(0xFFE9435A),
       ),
-      routerConfig: router,
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }

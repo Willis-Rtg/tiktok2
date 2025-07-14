@@ -61,7 +61,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     if (cameras.isEmpty) return;
 
     _cameraController = CameraController(
-      cameras[_isSelfieMode ? 0 : 1],
+      cameras[0],
       ResolutionPreset.high,
       enableAudio: false,
     );

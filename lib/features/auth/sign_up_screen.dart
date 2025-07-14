@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tiktok2/constants/gaps.dart';
-import 'package:tiktok2/features/auth/username_screen.dart';
-import 'package:tiktok2/features/auth/login_screen.dart';
+import 'package:tiktok2/features/auth/vm/social_auth_vm.dart';
 import 'package:tiktok2/features/auth/widgets/social_btn.dart';
 import 'package:tiktok2/utils.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
+  @override
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     void onLogInTap(BuildContext context) async {
@@ -104,13 +109,17 @@ class SignUpScreen extends StatelessWidget {
                                 icon: FontAwesomeIcons.envelope,
                               ),
                               SocialBtn(
-                                text: "Continue with Apple",
+                                text: "Continue with github",
                                 color:
                                     isDarkMode(context)
                                         ? Colors.black
                                         : Colors.white,
-                                onTap: () {},
-                                icon: FontAwesomeIcons.apple,
+                                onTap: () {
+                                  ref
+                                      .read(socialAuthProvider.notifier)
+                                      .githubLogin(context);
+                                },
+                                icon: FontAwesomeIcons.github,
                               ),
                               SocialBtn(
                                 text: "Continue with Facebook",
